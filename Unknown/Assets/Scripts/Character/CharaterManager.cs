@@ -8,9 +8,14 @@ namespace SG
     public class CharaterManager : MonoBehaviour
     {
         
-        private void Awake()
+        protected virtual void Awake()
         {
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(gameObject);
+        }
+
+        protected virtual void Update()
+        {
+            
         }
     }
 
