@@ -19,7 +19,12 @@ namespace SG
         {
             base.Update();
 
-            // playerLocomotionManager.HandleAllMovement();
+            if(!IsOwner)
+            {
+                return;
+            }
+
+             playerLocomotionManager.HandleAllMovement();
            
         }
 

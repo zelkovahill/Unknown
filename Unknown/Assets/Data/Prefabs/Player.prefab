@@ -61,7 +61,16 @@ PrefabInstance:
       addedObject: {fileID: -9011048764055822739}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 300b3bc28b3824092830431701e27771, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -4705678882240096438}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 300b3bc28b3824092830431701e27771, type: 3}
+      insertIndex: -1
       addedObject: {fileID: -6751018153499275207}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 300b3bc28b3824092830431701e27771, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2041937233061177961}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 300b3bc28b3824092830431701e27771, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2825850019200032330}
   m_SourcePrefab: {fileID: 100100000, guid: 300b3bc28b3824092830431701e27771, type: 3}
 --- !u!1 &2242531462703550474 stripped
 GameObject:
@@ -80,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1969788923
+  GlobalObjectIdHash: 1611046749
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -88,6 +97,25 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-4705678882240096438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2242531462703550474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d799efa9228d484f9aeceef4a0cbd6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  networkRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
+  networkPositionVelocity: {x: 0, y: 0, z: 0}
+  networkPositionSmoothTime: 0.1
+  networkRotationSmoothTime: 0.1
 --- !u!114 &-6751018153499275207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,3 +128,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfd808964cef4516a5018cb6cd793b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  verticalMovement: 0
+  horizontalMovement: 0
+  moveAmount: 0
+  walkingSpeed: 2
+  runningSpeed: 5
+  rotationSpeed: 15
+--- !u!114 &2041937233061177961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2242531462703550474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c35b717c75a95455b964a798df2da998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterController: {fileID: -2825850019200032330}
+--- !u!143 &-2825850019200032330
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2242531462703550474}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.23
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}

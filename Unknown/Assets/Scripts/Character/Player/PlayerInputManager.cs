@@ -11,6 +11,9 @@ namespace SG
 
         private PlayerControls playerControls;
         [SerializeField] Vector2 movementInput;
+        public float horizontalInput;
+         public float verticalInput;
+         public float moveAmount;
 
         private void Awake()
         {
@@ -65,9 +68,51 @@ namespace SG
         {
              SceneManager.activeSceneChanged -= OnSceneChange;
         }
-        
-           
+
+        private void OnApplicationFocus(bool focus)
+        {
+            if(enabled)
+            {
+                if(focus)
+                {
+                    playerControls.Enable();
+                }
+                else
+                {
+                    playerControls.Disable();
+                }
+            }
+        }
+
+        private void Update()
+        {
+            HandleMovementInput();
+        }
+
+        private void HandleMovementInput()
+        {
+            horizontalInput = movementInput.x;
+            verticalInput = movementInput.y;
+
+            
+            moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
+
+
+            if(moveAmount<=0.5 && moveAmount>=0.1)
+            {
+                moveAmount = 0.5f;
+            }
+            else if(moveAmount>0.5 && moveAmount<=1)
+            {
+                moveAmount = 1f;
+            }
+        }
+
+
+
     }
+
+    
 
 }
 

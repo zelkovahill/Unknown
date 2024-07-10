@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 
 namespace SG
 {
-    public class CharaterLocomotionManager : MonoBehaviour
-{
-    protected virtual void Awake()
+    public class PlayerNetworkManager : CharaterNetworkManager
     {
         
+    
     }
 
 }
-}
+
