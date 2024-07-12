@@ -8,6 +8,7 @@ namespace SG
     public class PlayerInputManager : MonoBehaviour
     {
         public static PlayerInputManager instance;
+        public PlayerManager player;
 
 
         [Header("Player Movement Input")]
@@ -115,6 +116,15 @@ namespace SG
             {
                 moveAmount = 1f;
             }
+
+            if(player ==null)
+            {
+                return;
+            }
+
+            
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0,moveAmount);
+
         }
 
         private void HandleCameraMovementInput(){

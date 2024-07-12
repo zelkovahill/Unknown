@@ -28,7 +28,30 @@ public class PlayerLocomotionManager : CharaterLocomotionManager
 
             player = GetComponent<PlayerManager>();
         }
-        public void HandleAllMovement()
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if(player.IsOwner)
+        {
+            player.charaterNetworkManager.verticalMovement.Value = verticalMovement;
+            player.charaterNetworkManager.HorizontalMovement.Value = horizontalMovement;
+            player.charaterNetworkManager.MoveAmount.Value = moveAmount;
+        }
+        else
+        {
+            verticalMovement = player.charaterNetworkManager.verticalMovement.Value;
+            horizontalMovement = player.charaterNetworkManager.HorizontalMovement.Value;
+            moveAmount = player.charaterNetworkManager.MoveAmount.Value;
+
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0,moveAmount);
+
+
+
+        }
+    }
+    public void HandleAllMovement()
    {
         HandleGroundedMovement();
         HandleRotation();
@@ -36,17 +59,18 @@ public class PlayerLocomotionManager : CharaterLocomotionManager
 
    }
 
-   private void GetVerticalMovementInputs()
+   private void GetMovementValues()
    {
        verticalMovement = PlayerInputManager.instance.verticalInput;
        horizontalMovement = PlayerInputManager.instance.horizontalInput;
+       moveAmount = PlayerInputManager.instance.moveAmount;
 
 
    }
 
    private void HandleGroundedMovement()
    {
-        GetVerticalMovementInputs();
+        GetMovementValues();
         moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
          moveDirection = moveDirection + PlayerCamera.instance.transform.right * horizontalMovement;
          moveDirection.Normalize();

@@ -8,9 +8,10 @@ namespace SG
 {
     public class CharaterManager : NetworkBehaviour
     {
-        public CharacterController characterController;
+        [HideInInspector] public CharacterController characterController;
+        [HideInInspector] public Animator animator;
 
-        private CharaterNetworkManager charaterNetworkManager;
+        [HideInInspector] public CharaterNetworkManager charaterNetworkManager;
 
         
         protected virtual void Awake()
@@ -18,6 +19,7 @@ namespace SG
             DontDestroyOnLoad(gameObject);
 
             characterController = GetComponent<CharacterController>();
+            animator = GetComponentInChildren<Animator>();
             charaterNetworkManager = GetComponent<CharaterNetworkManager>();
         }
 
