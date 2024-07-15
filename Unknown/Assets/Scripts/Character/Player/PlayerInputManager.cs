@@ -11,6 +11,13 @@ namespace SG
         public PlayerManager player;
 
 
+
+        [Header("Camera Movement Input")]
+        [SerializeField] Vector2 CameraInput;
+        public float cameraHorizontalInput;
+        public float cameraVerticalInput;
+
+
         [Header("Player Movement Input")]
         private PlayerControls playerControls;
         [SerializeField] Vector2 movementInput;
@@ -18,10 +25,9 @@ namespace SG
          public float verticalInput;
          public float moveAmount;
 
-        [Header("Camera Movement Input")]
-        [SerializeField] Vector2 CameraInput;
-          public float cameraHorizontalInput;
-         public float cameraVerticalInput;
+        [Header("Player Action Input")]
+        [SerializeField] private bool dodgeInput = false;
+
 
         private void Awake()
         {
@@ -48,12 +54,13 @@ namespace SG
 
         private void OnEnable()
         {
-         if(playerControls == null)
+            if(playerControls == null)
             {
                 playerControls = new PlayerControls();
 
                 playerControls.PlayerMovement.Movement.performed += i => movementInput  = i.ReadValue<Vector2>();
                 playerControls.PlayerCamera.Movement.performed += i => CameraInput  = i.ReadValue<Vector2>();
+                playerControls.PlayerAction.Dodge.performed += i => dodgeInput = true;
             }
 
             playerControls.Enable();
@@ -95,10 +102,16 @@ namespace SG
 
         private void Update()
         {
-            HandlePlayerMovementInput();
-            HandleCameraMovementInput();
+           HandleAllInputs();
         }
 
+        private void HandleAllInputs(){
+            HandlePlayerMovementInput();
+            HandleCameraMovementInput();
+            HandleDodgeInput();
+        }
+
+// Movement
         private void HandlePlayerMovementInput()
         {
             horizontalInput = movementInput.x;
@@ -133,6 +146,18 @@ namespace SG
 
 
         }
+
+// Action
+        private void HandleDodgeInput(){
+            if(dodgeInput){
+                dodgeInput = false;
+
+                player.playerLocomotionManager.AttmptToPerformDodge();
+            }
+            
+
+        }
+        
 
     }
 

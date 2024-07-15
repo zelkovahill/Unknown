@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 namespace SG
 {
@@ -79,6 +80,23 @@ namespace SG
             // #endregion
             
             
+        }
+
+        public virtual void PlayTargetActionAnimation(
+            string targetAnimation, 
+            bool isPerformingAction, 
+            bool applyRootMotion=true,
+            bool canRotate= false, 
+            bool canMove=false)
+        {
+            character.applyRootMotion = applyRootMotion;
+            character.animator.CrossFade(targetAnimation,0.2f);
+
+            character.isPerformingAction = isPerformingAction;
+            character.canRotate = canRotate;
+            character.canMove = canMove;
+
+            character.charaterNetworkManager.NotifyServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId,targetAnimation,applyRootMotion);
         }
     
     }
