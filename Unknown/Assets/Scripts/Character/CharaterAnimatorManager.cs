@@ -9,76 +9,34 @@ namespace SG
     {
         CharaterManager character;
 
-        private float vertical;
-        private float horizontal;
+        private int vertical;
+        private int horizontal;
 
         protected virtual void Awake()
         {
             character = GetComponent<CharaterManager>();
+            vertical = Animator.StringToHash("Vertical");
+            horizontal = Animator.StringToHash("Horizontal");
 
         }
-        public void UpdateAnimatorMovementParameters(float horizontalMovement,float verticalMovement)
+        public void UpdateAnimatorMovementParameters(float horizontalMovement,float verticalMovement, bool isSprinting)
         {
-            // 옵션 1
-            character.animator.SetFloat("Horizontal", horizontalMovement,0.1f,Time.deltaTime);
-            character.animator.SetFloat("Vertical", verticalMovement,0.1f,Time.deltaTime);
+           
+            float horizontalAmount = horizontalMovement;
+            float verticalAmount = verticalMovement;
+        
+           
 
-            // // 옵션 2
-            // float snappedHorizontal = 0;
-            // float snappedVertical = 0;
+            if(isSprinting){
 
-            // #region Horizontal
-            // if(horizontalMovement > 0 && horizontalMovement < 0.5f)
-            // {
-            //     snappedHorizontal = 0.5f;
-            // }
-            // else if(horizontalMovement > 0.5f && horizontalMovement <= 1f)
-            // {
-            //     snappedHorizontal = 1f;
-            // }
-            // else if(horizontalMovement < 0 && horizontalMovement >= -0.5f)
-            // {
-            //     snappedHorizontal = -0.5f;
-            // }
-            // else if(horizontalMovement < -0.5f && horizontalMovement >= -1f)
-            // {
-            //     snappedHorizontal = -1f;
-            // }
-            // else
-            // {
-            //     snappedHorizontal = 0;
-            // }
-            // #endregion
+                verticalAmount = 2;
 
-            // #region Vertical
-            // if(verticalMovement > 0 && verticalMovement <= 0.5f)
-            // {
-            //     snappedVertical = 0.5f;
-            // }
-            // else if(verticalMovement > 0.5f && verticalMovement <= 1f)
-            // {
-            //     snappedVertical = 1f;
-            // }
-            // else if(verticalMovement < 0 && verticalMovement >= -0.5f)
-            // {
-            //     snappedVertical = -0.5f;
-            // }
-            // else if(verticalMovement < -0.5f && verticalMovement >= -1f)
-            // {
-            //     snappedVertical = -1f;
-            // }
-            // else
-            // {
-            //     snappedVertical = 0;
-            
-            // }
-
-            // character.animator.SetFloat("Horizontal", snappedHorizontal);
-            // character.animator.SetFloat("Vertical", snappedVertical);
+            }
+             character.animator.SetFloat(horizontal, horizontalAmount,0.1f,Time.deltaTime);
+            character.animator.SetFloat(vertical, verticalAmount,0.1f,Time.deltaTime);
 
 
-            // #endregion
-            
+
             
         }
 

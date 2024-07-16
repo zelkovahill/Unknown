@@ -133,7 +133,16 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""id"": ""65b06527-cf63-402b-9aea-0cbe84b3f585"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7eb2f053-3594-4fce-b4c1-dd4aa685ce47"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.1)"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -146,6 +155,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c35b749-4230-4eb1-8c27-e04f73de64f2"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -163,6 +183,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Player Action
         m_PlayerAction = asset.FindActionMap("Player Action", throwIfNotFound: true);
         m_PlayerAction_Dodge = m_PlayerAction.FindAction("Dodge", throwIfNotFound: true);
+        m_PlayerAction_Sprint = m_PlayerAction.FindAction("Sprint", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -317,11 +338,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerAction;
     private List<IPlayerActionActions> m_PlayerActionActionsCallbackInterfaces = new List<IPlayerActionActions>();
     private readonly InputAction m_PlayerAction_Dodge;
+    private readonly InputAction m_PlayerAction_Sprint;
     public struct PlayerActionActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActionActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Dodge => m_Wrapper.m_PlayerAction_Dodge;
+        public InputAction @Sprint => m_Wrapper.m_PlayerAction_Sprint;
         public InputActionMap Get() { return m_Wrapper.m_PlayerAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -334,6 +357,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Dodge.started += instance.OnDodge;
             @Dodge.performed += instance.OnDodge;
             @Dodge.canceled += instance.OnDodge;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
         }
 
         private void UnregisterCallbacks(IPlayerActionActions instance)
@@ -341,6 +367,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Dodge.started -= instance.OnDodge;
             @Dodge.performed -= instance.OnDodge;
             @Dodge.canceled -= instance.OnDodge;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
         }
 
         public void RemoveCallbacks(IPlayerActionActions instance)
@@ -369,5 +398,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IPlayerActionActions
     {
         void OnDodge(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
     }
 }

@@ -22,6 +22,9 @@ namespace SG
         public NetworkVariable<float> verticalMovement = new NetworkVariable<float>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
         public NetworkVariable<float> MoveAmount = new NetworkVariable<float>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
 
+        [Header("Flags")]
+        public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+
 
         protected virtual void Awake()
         {

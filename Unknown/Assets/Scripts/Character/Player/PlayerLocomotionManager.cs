@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShortcutManagement;
@@ -20,6 +21,7 @@ public class PlayerLocomotionManager : CharaterLocomotionManager
     private Vector3 moveDirection;
     [SerializeField] private float walkingSpeed=2;
     [SerializeField] private float runningSpeed=5;
+    [SerializeField] private float spintingSpeed=6.5f;
     [SerializeField] private float rotationSpeed=15;
 
     [Header("Dodge")]
@@ -49,7 +51,7 @@ public class PlayerLocomotionManager : CharaterLocomotionManager
             horizontalMovement = player.charaterNetworkManager.HorizontalMovement.Value;
             moveAmount = player.charaterNetworkManager.MoveAmount.Value;
 
-            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0,moveAmount);
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0,moveAmount,player.PlayerNetworkManager.isSprinting.Value);
 
 
 
@@ -90,7 +92,11 @@ public class PlayerLocomotionManager : CharaterLocomotionManager
          moveDirection.Normalize();
          moveDirection.y = 0;
 
-         if(PlayerInputManager.instance.moveAmount>0.5f)
+         if(player.PlayerNetworkManager.isSprinting.Value){
+                player.characterController.Move(moveDirection * spintingSpeed*Time.deltaTime);
+         }
+         else{
+            if(PlayerInputManager.instance.moveAmount>0.5f)
          {  
             player.characterController.Move(moveDirection * runningSpeed*Time.deltaTime);
          }
@@ -98,6 +104,10 @@ public class PlayerLocomotionManager : CharaterLocomotionManager
          {
              player.characterController.Move(moveDirection * walkingSpeed*Time.deltaTime);
          }
+
+         }
+
+         
    }
 
    private void HandleRotation()
@@ -122,6 +132,22 @@ public class PlayerLocomotionManager : CharaterLocomotionManager
         Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation,rotationSpeed * Time.deltaTime );
         transform.rotation = targetRotation;
    }
+
+public void HandleSprinting(){
+    if(player.isPerformingAction){
+        player.PlayerNetworkManager.isSprinting.Value = false;
+    }
+
+
+
+    if(moveAmount>=0.5f){
+        player.PlayerNetworkManager.isSprinting.Value = true;
+    }
+    else{
+         player.PlayerNetworkManager.isSprinting.Value = false;
+    }
+
+}
 
    public void AttmptToPerformDodge()
    {
