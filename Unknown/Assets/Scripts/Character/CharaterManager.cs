@@ -19,7 +19,7 @@ namespace SG
         public bool canRotate = true;
         public bool canMove = true;
 
-        
+
         protected virtual void Awake()
         {
             DontDestroyOnLoad(gameObject);
@@ -31,7 +31,7 @@ namespace SG
 
         protected virtual void Update()
         {
-            if(IsOwner)
+            if (IsOwner)
             {
                 charaterNetworkManager.networkPosition.Value = transform.position;
                 charaterNetworkManager.networkRotation.Value = transform.rotation;
@@ -48,19 +48,19 @@ namespace SG
                 // rotation
                 transform.rotation = Quaternion.Slerp
                     (transform.rotation,
-                    charaterNetworkManager.networkRotation.Value, 
+                    charaterNetworkManager.networkRotation.Value,
                     charaterNetworkManager.networkRotationSmoothTime);
             }
-            
+
         }
-    
+
         protected virtual void LateUpdate()
         {
-            
+
         }
     }
 
-    
+
 
 
 }

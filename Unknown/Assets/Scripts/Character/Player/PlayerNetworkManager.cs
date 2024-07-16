@@ -8,8 +8,8 @@ namespace SG
 {
     public class PlayerNetworkManager : CharaterNetworkManager
     {
-        
-    
+
+
     }
 
 }

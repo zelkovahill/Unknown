@@ -22,8 +22,8 @@ namespace SG
         private PlayerControls playerControls;
         [SerializeField] Vector2 movementInput;
         public float horizontalInput;
-         public float verticalInput;
-         public float moveAmount;
+        public float verticalInput;
+        public float moveAmount;
 
         [Header("Player Action Input")]
         [SerializeField] private bool dodgeInput = false;
@@ -32,16 +32,16 @@ namespace SG
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = this;
-             }
+            }
             else
             {
                 Destroy(gameObject);
             }
-            
-            
+
+
         }
 
         private void Start()
@@ -50,17 +50,17 @@ namespace SG
 
             SceneManager.activeSceneChanged += OnSceneChange;
 
-            instance.enabled=false;
+            instance.enabled = false;
         }
 
         private void OnEnable()
         {
-            if(playerControls == null)
+            if (playerControls == null)
             {
                 playerControls = new PlayerControls();
 
-                playerControls.PlayerMovement.Movement.performed += i => movementInput  = i.ReadValue<Vector2>();
-                playerControls.PlayerCamera.Movement.performed += i => CameraInput  = i.ReadValue<Vector2>();
+                playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+                playerControls.PlayerCamera.Movement.performed += i => CameraInput = i.ReadValue<Vector2>();
                 playerControls.PlayerAction.Dodge.performed += i => dodgeInput = true;
 
                 // Sprint Input 
@@ -71,30 +71,30 @@ namespace SG
             playerControls.Enable();
         }
 
-        private void OnSceneChange(Scene oldScene ,Scene newScene)
+        private void OnSceneChange(Scene oldScene, Scene newScene)
         {
-             if(newScene.buildIndex == WorldSaveGameManager.instance.GetWorldSceneIndex())
-             {
-                instance.enabled=true;
-             }
-             else
-             {
-                instance.enabled=false;
-             }
+            if (newScene.buildIndex == WorldSaveGameManager.instance.GetWorldSceneIndex())
+            {
+                instance.enabled = true;
+            }
+            else
+            {
+                instance.enabled = false;
+            }
         }
 
 
 
-        private  void OnDestory()
+        private void OnDestory()
         {
-             SceneManager.activeSceneChanged -= OnSceneChange;
+            SceneManager.activeSceneChanged -= OnSceneChange;
         }
 
         private void OnApplicationFocus(bool focus)
         {
-            if(enabled)
+            if (enabled)
             {
-                if(focus)
+                if (focus)
                 {
                     playerControls.Enable();
                 }
@@ -107,77 +107,84 @@ namespace SG
 
         private void Update()
         {
-           HandleAllInputs();
+            HandleAllInputs();
         }
 
-        private void HandleAllInputs(){ 
+        private void HandleAllInputs()
+        {
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
             HandleSprinting();
-            
+
         }
 
-// Movement
+        // Movement
         private void HandlePlayerMovementInput()
         {
             horizontalInput = movementInput.x;
             verticalInput = movementInput.y;
 
-            
+
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
 
 
-            if(moveAmount<=0.5 && moveAmount>=0.1)
+            if (moveAmount <= 0.5 && moveAmount >= 0.1)
             {
                 moveAmount = 0.5f;
             }
-            else if(moveAmount>0.5 && moveAmount<=1)
+            else if (moveAmount > 0.5 && moveAmount <= 1)
             {
                 moveAmount = 1f;
             }
 
-            if(player ==null)
+            if (player == null)
             {
                 return;
             }
 
-            
-            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0,moveAmount,player.PlayerNetworkManager.isSprinting.Value);
+
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.PlayerNetworkManager.isSprinting.Value);
 
         }
 
-        private void HandleCameraMovementInput(){
+        private void HandleCameraMovementInput()
+        {
             cameraHorizontalInput = CameraInput.x;
             cameraVerticalInput = CameraInput.y;
 
 
         }
 
-// Action
-        private void HandleDodgeInput(){
-            if(dodgeInput){
+        // Action
+        private void HandleDodgeInput()
+        {
+            if (dodgeInput)
+            {
                 dodgeInput = false;
 
                 player.playerLocomotionManager.AttmptToPerformDodge();
             }
-            
+
 
         }
 
-        private void HandleSprinting(){
-            if(sprintInput){
+        private void HandleSprinting()
+        {
+            if (sprintInput)
+            {
                 player.playerLocomotionManager.HandleSprinting();
             }
-            else{
+            else
+            {
                 player.PlayerNetworkManager.isSprinting.Value = false;
             }
         }
-        
+
 
     }
 
-    
+
 
 }
 

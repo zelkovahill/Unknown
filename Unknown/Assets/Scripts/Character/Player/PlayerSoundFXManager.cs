@@ -5,12 +5,12 @@ using UnityEngine;
 namespace SG
 {
 
-public class PlayerSoundFXManager : CharaterSoundFXManager
-{
+    public class PlayerSoundFXManager : CharaterSoundFXManager
+    {
 
 
 
-}
+    }
 
 
 

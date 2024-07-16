@@ -5,29 +5,33 @@ using UnityEngine;
 namespace SG
 {
 
-public class WorldSoundFXManager : MonoBehaviour
-{
+    public class WorldSoundFXManager : MonoBehaviour
+    {
 
-    public static WorldSoundFXManager instance;
+        public static WorldSoundFXManager instance;
 
-    [Header("Action Sounds")]
-    public AudioClip rollSFX;
+        [Header("Action Sounds")]
+        public AudioClip rollSFX;
 
 
-    private void Awake(){
-        if(instance == null){
-            instance = this;
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-        else{
-            Destroy(gameObject);
-        }
-    }
 
-    private void Start(){
-        DontDestroyOnLoad(gameObject);
+        private void Start()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
     }
-    
-}
 
 
 }

@@ -6,42 +6,42 @@ using System.Runtime.InteropServices;
 
 namespace SG
 {
-public class PlayerUIManager : MonoBehaviour
-{
-    public static PlayerUIManager instance;
-
-    [Header("NETWORK JOIN")]
-    [SerializeField] private bool startGameAsClient;
-
-    private void Awake()
+    public class PlayerUIManager : MonoBehaviour
     {
-        if(instance == null)
+        public static PlayerUIManager instance;
+
+        [Header("NETWORK JOIN")]
+        [SerializeField] private bool startGameAsClient;
+
+        private void Awake()
         {
-            instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-        else
+
+        private void Start()
         {
-            Destroy(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
-    }
 
-    private void Start()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Update()
-    {
-        if(startGameAsClient)
+        private void Update()
         {
-            startGameAsClient = false;
+            if (startGameAsClient)
+            {
+                startGameAsClient = false;
 
-            // WE MUST FIRST 
-            NetworkManager.Singleton.Shutdown();
+                // WE MUST FIRST 
+                NetworkManager.Singleton.Shutdown();
 
-            NetworkManager.Singleton.StartClient();
+                NetworkManager.Singleton.StartClient();
+            }
         }
-    }
 
-}
+    }
 }

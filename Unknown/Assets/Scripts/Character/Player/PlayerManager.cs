@@ -6,39 +6,40 @@ using UnityEngine;
 namespace SG
 {
     public class PlayerManager : CharaterManager
-{
-    [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
-    [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
-    [HideInInspector] public PlayerNetworkManager PlayerNetworkManager;
-
-    protected override void Awake()
     {
-        base.Awake();
+        [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
+        [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
+        [HideInInspector] public PlayerNetworkManager PlayerNetworkManager;
 
-        playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
-        playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
-        PlayerNetworkManager = GetComponent<PlayerNetworkManager>();
-    }
+        protected override void Awake()
+        {
+            base.Awake();
+
+            playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
+            playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
+            PlayerNetworkManager = GetComponent<PlayerNetworkManager>();
+        }
 
         protected override void Update()
         {
             base.Update();
 
-            if(!IsOwner)
+            if (!IsOwner)
             {
                 return;
             }
 
-             playerLocomotionManager.HandleAllMovement();
-           
+            playerLocomotionManager.HandleAllMovement();
+
         }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
 
-            
-            if(IsOwner){
+
+            if (IsOwner)
+            {
                 PlayerCamera.instance.player = this;
                 PlayerInputManager.instance.player = this;
 
@@ -48,12 +49,12 @@ namespace SG
 
         protected override void LateUpdate()
         {
-            if(!IsOwner)
+            if (!IsOwner)
             {
                 return;
             }
             base.LateUpdate();
-            
+
             PlayerCamera.instance.HandleAllCameraActions();
         }
     }

@@ -12,7 +12,7 @@ namespace SG
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = this;
             }
@@ -37,6 +37,6 @@ namespace SG
         {
             return worldSceneIndex;
         }
-      
+
     }
 }
