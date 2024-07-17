@@ -8,7 +8,7 @@ namespace SG
     // 캐릭터의 애니메이션을 관리하는 클래스
     public class CharaterAnimatorManager : MonoBehaviour
     {
-        CharaterManager character;
+        CharacterManager character;
 
         // 애니메이터 파라미터의 해시값을 저장하는 변수
         private int vertical;
@@ -16,7 +16,7 @@ namespace SG
 
         protected virtual void Awake()
         {
-            character = GetComponent<CharaterManager>();
+            character = GetComponent<CharacterManager>();
 
             // 애니메이터 파라미터의 해시값을 생성
             vertical = Animator.StringToHash("Vertical");
@@ -62,7 +62,7 @@ namespace SG
             character.canMove = canMove;
 
             // 서버에 애니메이션 실행을 알림
-            character.charaterNetworkManager.NotifyServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
+            character.characterNetworkManager.NotifyServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
         }
     }
 }

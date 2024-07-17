@@ -7,11 +7,11 @@ using Unity.Netcode;
 namespace SG
 {
     // 캐릭터의 기본적인 동작을 관리하는 클래스
-    public class CharaterManager : NetworkBehaviour
+    public class CharacterManager : NetworkBehaviour
     {
         [HideInInspector] public CharacterController characterController;
         [HideInInspector] public Animator animator;
-        [HideInInspector] public CharaterNetworkManager charaterNetworkManager;
+        [HideInInspector] public CharacterNetworkManager characterNetworkManager;
 
         // 캐릭터의 상태를 나타내는 플래그 변수들
         [Header("Flags")]
@@ -27,7 +27,7 @@ namespace SG
 
             characterController = GetComponent<CharacterController>();
             animator = GetComponentInChildren<Animator>();
-            charaterNetworkManager = GetComponent<CharaterNetworkManager>();
+            characterNetworkManager = GetComponent<CharacterNetworkManager>();
         }
 
         protected virtual void Update()
@@ -35,23 +35,23 @@ namespace SG
             // 로컬 플레이어인 경우 네트워크 위치와 회전값을 업데이트
             if (IsOwner)
             {
-                charaterNetworkManager.networkPosition.Value = transform.position;
-                charaterNetworkManager.networkRotation.Value = transform.rotation;
+                characterNetworkManager.networkPosition.Value = transform.position;
+                characterNetworkManager.networkRotation.Value = transform.rotation;
             }
             else
             {
                 // 네트워크 위치로 부드럽게 이동
                 transform.position = Vector3.SmoothDamp
                     (transform.position,
-                    charaterNetworkManager.networkPosition.Value,
-                    ref charaterNetworkManager.networkPositionVelocity,
-                    charaterNetworkManager.networkPositionSmoothTime);
+                    characterNetworkManager.networkPosition.Value,
+                    ref characterNetworkManager.networkPositionVelocity,
+                    characterNetworkManager.networkPositionSmoothTime);
 
                 // 네트워크 회전으로 부드럽게 회전
                 transform.rotation = Quaternion.Slerp
                     (transform.rotation,
-                    charaterNetworkManager.networkRotation.Value,
-                    charaterNetworkManager.networkRotationSmoothTime);
+                    characterNetworkManager.networkRotation.Value,
+                    characterNetworkManager.networkRotationSmoothTime);
             }
 
         }
@@ -60,5 +60,7 @@ namespace SG
         {
 
         }
+
+       
     }
 }

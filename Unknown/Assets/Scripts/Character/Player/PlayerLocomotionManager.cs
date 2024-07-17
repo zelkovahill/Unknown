@@ -25,10 +25,12 @@ namespace SG
         [SerializeField] private float runningSpeed = 5;
         [SerializeField] private float spintingSpeed = 6.5f;
         [SerializeField] private float rotationSpeed = 15;
+        [SerializeField] private int sprintingStaminaCost = 2;
 
         // 회피 동작 시의 방향을 저장하는 변수
         [Header("Dodge")]
         private Vector3 rollDirection;
+        [SerializeField] private float dodgeStaminaCost = 25;
 
 
         protected override void Awake()
@@ -45,18 +47,18 @@ namespace SG
             // 플레이어가 로컬 오너일 때 네트워크로 이동값을 동기화
             if (player.IsOwner)
             {
-                player.charaterNetworkManager.verticalMovement.Value = verticalMovement;
-                player.charaterNetworkManager.HorizontalMovement.Value = horizontalMovement;
-                player.charaterNetworkManager.MoveAmount.Value = moveAmount;
+                player.characterNetworkManager.verticalMovement.Value = verticalMovement;
+                player.characterNetworkManager.HorizontalMovement.Value = horizontalMovement;
+                player.characterNetworkManager.MoveAmount.Value = moveAmount;
             }
             else
             {
                 // 로컬 오너가 아닐 때 네트워크에서 이동값을 받아오긔
-                verticalMovement = player.charaterNetworkManager.verticalMovement.Value;
-                horizontalMovement = player.charaterNetworkManager.HorizontalMovement.Value;
-                moveAmount = player.charaterNetworkManager.MoveAmount.Value;
+                verticalMovement = player.characterNetworkManager.verticalMovement.Value;
+                horizontalMovement = player.characterNetworkManager.HorizontalMovement.Value;
+                moveAmount = player.characterNetworkManager.MoveAmount.Value;
 
-                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.PlayerNetworkManager.isSprinting.Value);
+                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
 
 
 
@@ -95,7 +97,7 @@ namespace SG
             moveDirection.y = 0;
 
             // 이동 속도를 적용
-            if (player.PlayerNetworkManager.isSprinting.Value)
+            if (player.playerNetworkManager.isSprinting.Value)
             {
                 player.characterController.Move(moveDirection * spintingSpeed * Time.deltaTime);
             }
@@ -145,16 +147,27 @@ namespace SG
         {
             if (player.isPerformingAction)
             {
-                player.PlayerNetworkManager.isSprinting.Value = false;
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+                return;
             }
 
             if (moveAmount >= 0.5f)
             {
-                player.PlayerNetworkManager.isSprinting.Value = true;
+                player.playerNetworkManager.isSprinting.Value = true;
             }
             else
             {
-                player.PlayerNetworkManager.isSprinting.Value = false;
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.isSprinting.Value)
+            {
+                player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
             }
         }
 
@@ -164,6 +177,11 @@ namespace SG
             if (!player.isPerformingAction)
             {
                 player.isPerformingAction = true;
+            }
+
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+            {
+                return;
             }
 
             if (PlayerInputManager.instance.moveAmount > 0)
@@ -185,6 +203,8 @@ namespace SG
                 // 이동 입력이 없을 때 백스텝 동작을 실행
                 player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
             }
+
+            player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
     }
 }

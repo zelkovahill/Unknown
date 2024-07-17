@@ -158,7 +158,7 @@ namespace SG
             }
 
             // 플레이어 애니메이터의 이동 파라미터를 업데이트
-            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.PlayerNetworkManager.isSprinting.Value);
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
 
         }
 
@@ -192,7 +192,7 @@ namespace SG
             }
             else
             {
-                player.PlayerNetworkManager.isSprinting.Value = false;
+                player.playerNetworkManager.isSprinting.Value = false;
             }
         }
     }

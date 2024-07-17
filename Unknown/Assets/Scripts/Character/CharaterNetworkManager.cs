@@ -7,9 +7,9 @@ using Unity.Netcode;
 namespace SG
 {
     // 네트워크를 통해 캐릭터의 상태를 동기화하는 클래스
-    public class CharaterNetworkManager : NetworkBehaviour
+    public class CharacterNetworkManager : NetworkBehaviour
     {
-        private CharaterManager character;
+        private CharacterManager character;
 
         // 네트워크를 통해 동기화할 위치와 회전값을 저장하는 변수들
         [Header("Position")]
@@ -32,10 +32,14 @@ namespace SG
         [Header("Flags")]
         public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        [Header("Stats")]
+        public NetworkVariable<int> endurance = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<float> currentStamina = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> maxStamina = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         protected virtual void Awake()
         {
-            character = GetComponent<CharaterManager>();
+            character = GetComponent<CharacterManager>();
         }
 
 
