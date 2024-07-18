@@ -17,8 +17,10 @@ namespace SG
         // 새로운 게임을 시작하는 함수
         public void StartNewGame()
         {
+            WorldSaveGameManager.instance.CreateNewGame();
+
             // 새로운 게임을 로드하는 코루틴 함수를 호출
-            StartCoroutine(WorldSaveGameManager.instance.LoadNewGame());
+            StartCoroutine(WorldSaveGameManager.instance.LoadWorldGame());
         }
     }
 }

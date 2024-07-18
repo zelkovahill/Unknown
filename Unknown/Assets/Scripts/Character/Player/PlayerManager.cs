@@ -36,7 +36,7 @@ namespace SG
             // 모든 이동을 처리
             playerLocomotionManager.HandleAllMovement();
 
-            
+
             playerStatsManager.RegenerateStamina();
         }
 
@@ -72,7 +72,26 @@ namespace SG
             // 모든 카메라 동작을 처리
             PlayerCamera.instance.HandleAllCameraActions();
         }
+
+        public void SaveGameDataToCurrentCharacterData(ref CharacterSaveData currentCharacterData)
+        {
+            currentCharacterData.characterName = playerNetworkManager.characterName.Value.ToString();
+            currentCharacterData.xPosition = transform.position.x;
+            currentCharacterData.yPosition = transform.position.y;
+            currentCharacterData.zPosition = transform.position.z;
+
+        }
+
+        public void LoadGameDataFromCurrentCharacterData(ref CharacterSaveData currentCharacterData)
+        {
+            playerNetworkManager.characterName.Value = currentCharacterData.characterName;
+            Vector3 myPosition = new Vector3(currentCharacterData.xPosition, currentCharacterData.yPosition, currentCharacterData.zPosition);
+            transform.position = myPosition;
+
+        }
     }
+
+
 
 }
 

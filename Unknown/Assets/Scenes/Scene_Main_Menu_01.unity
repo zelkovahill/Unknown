@@ -1064,7 +1064,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 980b0e941b07e4a0a93bf91e37b8d761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveGame: 0
+  loadGame: 0
   worldSceneIndex: 1
+  currentCharacterSlotBeingUsed: 0
+  currentCharacterData:
+    characterName: 
+    secondsPlayed: 0
+    xPosition: 0
+    yPosition: 0
+    zPosition: 0
+  characterSlot01:
+    characterName: 
+    secondsPlayed: 0
+    xPosition: 0
+    yPosition: 0
+    zPosition: 0
 --- !u!1 &1687864936
 GameObject:
   m_ObjectHideFlags: 0
