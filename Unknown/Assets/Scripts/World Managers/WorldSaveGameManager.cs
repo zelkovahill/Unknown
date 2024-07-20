@@ -9,7 +9,7 @@ namespace SG
     {
         public static WorldSaveGameManager instance;
 
-        [SerializeField] private PlayerManager player;
+        public PlayerManager player;
 
         [Header("Save/Load")]
         [SerializeField] private bool saveGame;
@@ -114,12 +114,35 @@ namespace SG
             return fileName;
         }
 
-        public void CreateNewGame()
+        public void AttemptToCreateNewGame()
         {
-            // Create a new File, With a name depending on which slot we are using
-            saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(currentCharacterSlotBeingUsed);
+            saveFileDataWriter = new SaveFileDataWriter();
+            saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
 
-            currentCharacterData = new CharacterSaveData();
+            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.characterSlot_01);
+
+            if (!saveFileDataWriter.CheckToSeeIfFileExists())
+            {
+                // if this profile slot is not taken, make a new one suiong this slot
+                currentCharacterSlotBeingUsed = CharacterSlot.characterSlot_01;
+                currentCharacterData = new CharacterSaveData();
+                StartCoroutine(LoadWorldGame());
+                return;
+            }
+
+            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.characterSlot_02);
+
+            if (!saveFileDataWriter.CheckToSeeIfFileExists())
+            {
+                // if this profile slot is not taken, make a new one suiong this slot
+                currentCharacterSlotBeingUsed = CharacterSlot.characterSlot_02;
+                currentCharacterData = new CharacterSaveData();
+                StartCoroutine(LoadWorldGame());
+                return;
+            }
+
+            TitleScreenManager.instance.DisplayNoFreeCharacterSlotsPopUp();
+
         }
 
         public void LoadGame()
@@ -196,6 +219,8 @@ namespace SG
         {
             // 비동기적으로 월드 씬을 로드
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
+
+            player.LoadGameDataFromCurrentCharacterData(ref currentCharacterData);
             yield return null;
         }
 
