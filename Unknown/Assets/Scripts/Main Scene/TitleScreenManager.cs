@@ -19,10 +19,17 @@ namespace SG
         [SerializeField] private Button LoadMenuReturnButton;
         [SerializeField] private Button mainMenuLoadGameButton;
         [SerializeField] private Button mainMenuNewGameButton;
+        [SerializeField] private Button deleteCharacterPopUpConfirmButton;
 
         [Header("Pop Ups")]
         [SerializeField] private GameObject noCharacterSlotsPopUp;
         [SerializeField] private Button noCharacterSlotsOkayButton;
+        [SerializeField] private GameObject deleteCharacterSlotPopUp;
+
+        [Header("Character Slots")]
+        public CharacterSlot currentSelectedSlot = CharacterSlot.No_SLOT;
+
+
 
         private void Awake()
         {
@@ -90,6 +97,42 @@ namespace SG
         {
             noCharacterSlotsPopUp.SetActive(false);
             mainMenuNewGameButton.Select();
+        }
+
+        public void SelectCharacterSlot(CharacterSlot characterSlot)
+        {
+            currentSelectedSlot = characterSlot;
+        }
+
+        public void SelectNoSlot()
+        {
+            currentSelectedSlot = CharacterSlot.No_SLOT;
+        }
+
+        public void AttemptToDeleteCharacterSlot()
+        {
+            if (currentSelectedSlot != CharacterSlot.No_SLOT)
+            {
+                deleteCharacterSlotPopUp.SetActive(true);
+                deleteCharacterPopUpConfirmButton.Select();
+            }
+        }
+
+        public void DeleteCharacterSlot()
+        {
+            deleteCharacterSlotPopUp.SetActive(false);
+            WorldSaveGameManager.instance.DeleteGame(currentSelectedSlot);
+
+            // we disable and then enable the load menu, to refresh the slots (the deleted slots will now become inactive)
+            titleScreenLoadMenu.SetActive(false);
+            titleScreenLoadMenu.SetActive(true);
+            LoadMenuReturnButton.Select();
+        }
+
+        public void CloseDeleteCharacterPopUp()
+        {
+            deleteCharacterSlotPopUp.SetActive(false);
+            LoadMenuReturnButton.Select();
         }
     }
 }

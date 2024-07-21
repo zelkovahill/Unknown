@@ -141,6 +141,18 @@ namespace SG
                 return;
             }
 
+
+            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.characterSlot_03);
+
+            if (!saveFileDataWriter.CheckToSeeIfFileExists())
+            {
+                // if this profile slot is not taken, make a new one suiong this slot
+                currentCharacterSlotBeingUsed = CharacterSlot.characterSlot_03;
+                currentCharacterData = new CharacterSaveData();
+                StartCoroutine(LoadWorldGame());
+                return;
+            }
+
             TitleScreenManager.instance.DisplayNoFreeCharacterSlotsPopUp();
 
         }
@@ -175,6 +187,16 @@ namespace SG
 
             // write thet info onto a json file saved to this machine
             saveFileDataWriter.CreateNewCharacterFile(currentCharacterData);
+        }
+
+        public void DeleteGame(CharacterSlot characterSlot)
+        {
+            // Choose file based on name
+            saveFileDataWriter = new SaveFileDataWriter();
+            saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
+            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(characterSlot);
+
+            saveFileDataWriter.DeleteSaveFile();
         }
 
         // load all charavter profiles on device when starting game
@@ -218,11 +240,22 @@ namespace SG
         public IEnumerator LoadWorldGame()
         {
             // 비동기적으로 월드 씬을 로드
+
+            // if you just want 1 world scene use this
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
+
+            // if you want to use different scenes for levels in your project use this
+            // AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
 
             player.LoadGameDataFromCurrentCharacterData(ref currentCharacterData);
             yield return null;
         }
+
+        // if you want to use a multi scene setup, there is no current scene index on a new character
+        // public IEnumerator LoadWorldSceneNewGame()
+        // {
+
+        // }
 
         // 월드 씬의 인덱스를 반환하는 함수
         public int GetWorldSceneIndex()
