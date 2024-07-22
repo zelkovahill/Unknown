@@ -30,6 +30,7 @@ namespace SG
         [Header("Player Action Input")]
         [SerializeField] private bool dodgeInput = false;     // 회피 입력을 저장하는 변수
         [SerializeField] private bool sprintInput = false;      //  달리기 입력을 저장하는 변수
+        [SerializeField] private bool jumpInput = false;       // 점프 입력을 저장하는 변수
 
 
         private void Awake()
@@ -69,6 +70,8 @@ namespace SG
 
                 // 회피 입력을 설정
                 playerControls.PlayerAction.Dodge.performed += i => dodgeInput = true;
+
+                playerControls.PlayerAction.Jump.performed += i => jumpInput = true;
 
                 // 달리기 입력을 설정
                 playerControls.PlayerAction.Sprint.performed += i => sprintInput = true;
@@ -129,7 +132,7 @@ namespace SG
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
-            HandleSprinting();
+            HandleSprintInput();
 
         }
 
@@ -184,7 +187,7 @@ namespace SG
         }
 
         // 달리기 입력을 처리하는 함수
-        private void HandleSprinting()
+        private void HandleSprintInput()
         {
             if (sprintInput)
             {
@@ -193,6 +196,19 @@ namespace SG
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
+            }
+        }
+
+        private void HandleJumpInput()
+        {
+            if(jumpInput)
+            {
+                jumpInput = false;
+
+                // if we have a UI Window open, simply return without doing anything
+
+                // attempt to perform jump
+                player.playerLocomotionManager.AttmptToPerformJump();
             }
         }
     }

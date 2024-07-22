@@ -31,6 +31,7 @@ namespace SG
         [Header("Dodge")]
         private Vector3 rollDirection;
         [SerializeField] private float dodgeStaminaCost = 25;
+        [SerializeField] private float jumpStaminaCost = 25;
 
 
         protected override void Awake()
@@ -205,6 +206,46 @@ namespace SG
             }
 
             player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+        }
+
+        public void AttmptToPerformJump()
+        {
+            // if we are performing a general actionm we do not want to allow a jump (will change when combat is added)
+            if (!player.isPerformingAction)
+            {
+                player.isPerformingAction = true;
+            }
+
+            // if we are out of stamina we do not wish to allow a jump
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+            {
+                return;
+            }
+
+            // if we are already in a jump, we do not want to allow a jump again until the current jump has finished
+            if (player.isJumping)
+            {
+                return;
+            }
+
+            // if we are not Grounded, we do not want to allow a jump
+            if (player.isGrounded)
+            {
+                return;
+            }
+
+            // if we are two handing our weapon, play the two handed jump animation, otherwise play the one handed animation ( to do )
+            player.playerAnimatorManager.PlayTargetActionAnimation("Main_Jump_01", false);
+
+            player.isJumping = true;
+
+            player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
+
+        }
+
+        public void ApplyJumpingValocity()
+        {
+            // apply an upward velocity
         }
     }
 }

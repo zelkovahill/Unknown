@@ -20,6 +20,9 @@ namespace SG
         public bool canRotate = true;
         public bool canMove = true;
 
+        public bool isJumping = false;
+        public bool isGrounded = true;
+
 
         protected virtual void Awake()
         {
@@ -32,6 +35,7 @@ namespace SG
 
         protected virtual void Update()
         {
+            animator.SetBool("isGrounded", isGrounded);
             // 로컬 플레이어인 경우 네트워크 위치와 회전값을 업데이트
             if (IsOwner)
             {
@@ -61,6 +65,6 @@ namespace SG
 
         }
 
-       
+
     }
 }
