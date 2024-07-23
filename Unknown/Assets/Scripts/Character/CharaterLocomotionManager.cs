@@ -11,7 +11,7 @@ namespace SG
         private CharacterManager character;
 
         [Header("Ground & Jumping")]
-        [SerializeField] private float gravityForce = -5.55f;
+        [SerializeField] protected float gravityForce = -5.55f;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float groundCheckSphereRadius = 1;
         [SerializeField] protected Vector3 yVelocity;   // the force at which our charcter is pulled up or down (Jumping or Falling)

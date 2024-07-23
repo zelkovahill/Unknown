@@ -27,11 +27,20 @@ namespace SG
         [SerializeField] private float rotationSpeed = 15;
         [SerializeField] private int sprintingStaminaCost = 2;
 
+
+        [Header("Jump")]
+        [SerializeField] private float jumpStaminaCost = 25;
+        [SerializeField] private float jumpHeight = 4f;
+        [SerializeField] private float jumpForwardSpeed = 5;
+        [SerializeField] private float freeFallSpeed = 2;
+        private Vector3 jumpDirection;
+
+
         // 회피 동작 시의 방향을 저장하는 변수
         [Header("Dodge")]
         private Vector3 rollDirection;
         [SerializeField] private float dodgeStaminaCost = 25;
-        [SerializeField] private float jumpStaminaCost = 25;
+
 
 
         protected override void Awake()
@@ -71,6 +80,8 @@ namespace SG
         {
             HandleGroundedMovement();
             HandleRotation();
+            HandleJumpingMovement();
+            HandleFreeFallMovement();
         }
 
         // 이동값을 가져오는 함수
@@ -115,6 +126,28 @@ namespace SG
 
             }
 
+
+        }
+
+        private void HandleJumpingMovement()
+        {
+            if (player.isJumping)
+            {
+                player.characterController.Move(jumpDirection * jumpForwardSpeed * Time.deltaTime);
+            }
+        }
+
+        private void HandleFreeFallMovement()
+        {
+            if (!player.isGrounded)
+            {
+                Vector3 freeFallDirection;
+                freeFallDirection = PlayerCamera.instance.transform.forward * PlayerInputManager.instance.verticalInput;
+                freeFallDirection = freeFallDirection + PlayerCamera.instance.transform.right * PlayerInputManager.instance.horizontalInput;
+                freeFallDirection.y = 0;
+
+                player.characterController.Move(freeFallDirection * freeFallSpeed * Time.deltaTime);
+            }
 
         }
 
@@ -229,7 +262,7 @@ namespace SG
             }
 
             // if we are not Grounded, we do not want to allow a jump
-            if (player.isGrounded)
+            if (!player.isGrounded)
             {
                 return;
             }
@@ -238,14 +271,40 @@ namespace SG
             player.playerAnimatorManager.PlayTargetActionAnimation("Main_Jump_01", false);
 
             player.isJumping = true;
-
+            ApplyJumpingVelocity(); // 애니메이션이 휴먼노이드가 아니라서 코드에서 처리해줘야함
             player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
+
+            jumpDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.verticalInput;
+            jumpDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontalInput;
+            jumpDirection.y = 0;
+
+            if (jumpDirection != Vector3.zero)
+            {
+                // if we are sprinting, jump direction is at full distance
+                if (player.playerNetworkManager.isSprinting.Value)
+                {
+                    jumpDirection *= 1;
+                }
+                // if we are running, jump direction is at Half distance
+                else if (PlayerInputManager.instance.moveAmount > 0.5f)
+                {
+                    jumpDirection *= 0.5f;
+                }
+                // if we are walking, jump direction is at quarter distance
+                else if (PlayerInputManager.instance.moveAmount <= 0.5f)
+                {
+                    jumpDirection *= 0.25f;
+                }
+            }
+
+
+
 
         }
 
-        public void ApplyJumpingValocity()
+        public void ApplyJumpingVelocity()
         {
-            // apply an upward velocity
+            yVelocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
         }
     }
 }
