@@ -60,10 +60,10 @@ namespace SG
 
         public int CalculateStaminaBasedOnEnduranceLevel(int endurance)
         {
+
             float stamina = 0;
 
-            stamina = endurance * 10;
-
+            stamina = endurance * 100;
             return Mathf.RoundToInt(stamina);
 
         }

@@ -15,7 +15,7 @@ namespace SG
         [Header("Position")]
         public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>(Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        
+
         // 네트워크 위치와 속도와 스무스 타임을 저장하는 변수들
         public Vector3 networkPositionVelocity;
         public float networkPositionSmoothTime = 0.1f;

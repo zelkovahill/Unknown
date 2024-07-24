@@ -428,6 +428,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100166, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
       insertIndex: -1
       addedObject: {fileID: -9107543877320975788}
+    - targetCorrespondingSourceObject: {fileID: 100166, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8802852614552527784}
   m_SourcePrefab: {fileID: 100100000, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
 --- !u!1 &3459270993287037191 stripped
 GameObject:
@@ -512,7 +515,7 @@ MonoBehaviour:
   currentStamina:
     m_InternalValue: 0
   maxStamina:
-    m_InternalValue: 0
+    m_InternalValue: 100
   characterName:
     m_InternalValue:
       utf8LengthInBytes: 9
@@ -610,8 +613,11 @@ MonoBehaviour:
   spintingSpeed: 6.5
   rotationSpeed: 15
   sprintingStaminaCost: 2
-  dodgeStaminaCost: 25
   jumpStaminaCost: 25
+  jumpHeight: 4
+  jumpForwardSpeed: 5
+  freeFallSpeed: 2
+  dodgeStaminaCost: 25
 --- !u!114 &8587218292880458007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -771,3 +777,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaRegenerationAmount: 2
   staminaRegenerationDelay: 2
+--- !u!114 &-8802852614552527784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3459270993287037191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06ffce1fda3c745e3807c93d766c344b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectToTest: {fileID: 11400000, guid: 9fe7c2b7e62d04418ae52fc385f55c79, type: 2}
+  processEffect: 0
